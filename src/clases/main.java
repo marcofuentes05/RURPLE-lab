@@ -23,6 +23,7 @@ public class main {
             Stream<String> lines = Files.lines(Paths.get("C:/Users/fuent/OneDrive/Documents/2018/POO/RURPLE/RURPLE-lab/mapa1.txt"),
                     StandardCharsets.UTF_8);
             lines.forEach(s  -> mapa.add(s));
+            //mapa.stream().forEach(p-> System.out.println(p));
         }catch(IOException e ){
             System.out.println("Error!");
         }
@@ -32,58 +33,174 @@ public class main {
             Stream <String> lines = Files.lines (Paths.get("C:/Users/fuent/OneDrive/Documents/2018/POO/RURPLE/RURPLE-lab/instrucciones.txt"),
                     StandardCharsets.UTF_8);
             lines.forEach(a -> instrucciones.add(a));
+            //lines.forEach(b -> System.out.println(b));
         }catch(IOException e){
             System.out.println("Error!");
         }
 
-        System.out.println("        Mapa        ");
-        mapa.forEach(a -> System.out.println(a));
+        //Interpreto la informacion del mapa
+        for (int c = 0;c <mapa.size();c++){
+            System.out.print(mapa.get(c));
+            String [] spl=mapa.get(c).split("");
+            for(int i = 0;i<spl.length;i++){
+                //System.out.print(spl[c]);
+                if (spl[c].equals(">")) {
+                    robots.add(new Robot(i, c, 0, 0));
+                    System.out.println("Slu2");
+                }else if (spl[c].equals("1")) {
+                    monedas.add(new PilaMonedas(i, c, 1));
+
+                } else if (spl[c].equals("2")) {
+                    monedas.add(new PilaMonedas(i, c, 2));
+
+                } else if (spl[c].equals("3")) {
+                    monedas.add(new PilaMonedas(i, c, 3));
+
+                } else if (spl[c].equals("4")) {
+                    monedas.add(new PilaMonedas(i, c, 4));
+
+                } else if (spl[c].equals("5")) {
+                    monedas.add(new PilaMonedas(i, c, 5));
+
+                } else if (spl[c].equals("6")) {
+                    monedas.add(new PilaMonedas(i, c, 6));
+
+                } else if (spl[c].equals("7")) {
+                    monedas.add(new PilaMonedas(i, c, 7));
+
+                } else if (spl[c].equals("8")) {
+                    monedas.add(new PilaMonedas(i, c, 8));
+
+                } else if (spl[c].equals("9")) {
+                    monedas.add(new PilaMonedas(i, c, 9));
+
+                } else if (spl[c].equals("<")) {
+                    robots.add(new Robot(i, c, 2, 0));
+                    System.out.println("Slu2");
+
+                } else if (spl[c].equals("\\-")) {
+                    muros.add(new Muro(i, c));
 
 
-        for (int control =0;control < instrucciones.size();control++){
-            String inst = instrucciones.get(control);
+                } else if (spl[c].equals("^")) {
+                    robots.add(new Robot(i, c, 3, 0));
+                    System.out.println("Slu2");
+
+                } else if (spl[c].equals("v")) {
+                    robots.add(new Robot(i, c, 1, 0));
+                    System.out.println("Slu2");
+
+                }
+            }
+            System.out.println("");
         }
+
+        //filtrar(mapa,muros,monedas,robots);
+        System.out.println("Numero de elementos en mapa: "+mapa.size());
+        System.out.println("Numero de elementos en muros: "+muros.size());
+        System.out.println("Numero de elementos en monedas:"+monedas.size());
+        System.out.println("Numero de elementos en robots: "+robots.size());
+        System.out.println("Numero de instrucciones: "+instrucciones.size());
+
+
+        //Instancio el robot del mapa
+        if (!robots.isEmpty()){
+            Robot  robot = robots.get(0);
+            for (int control =0;control < instrucciones.size();control++){
+                actualizarMapa(mapa,muros,monedas,robots);
+                mapa.forEach(a -> System.out.println(a));
+                String inst = instrucciones.get(control);
+                switch(inst){
+                    case "MOVE":
+                        if (robot.puedeMover(mapa)){
+                            robot.mover();
+                        }
+                        break;
+                    case "ROTATE":
+                        robot.girar();
+                        break;
+                    case "PICK":
+                        for(int i = 0;i<monedas.size();i++){
+                            if (monedas.get(i).getPosicion() == robot.getPosicion()){
+                                //El metodo recoger le suma monedas al robot y le resta a la pila de monedas.
+                                robot.recoger(monedas.get(i));
+                            }else{
+                                System.out.println("La instruccion PICK no se pudo ejecutar porque no hay una pila de monedas en la posicion...");
+                            }
+                        }
+                        break;
+                    default:
+                        System.out.println("-----------------------------------------");
+                        System.out.println("");
+                        System.out.println("Hay una linea en blanco...");
+                        System.out.println("");
+                        System.out.println("-----------------------------------------");
+                }
+            }
+        }else{
+            System.out.println("Hay un error en la lectura...");
+        }
+
+
+
     }
     //Este metodo interpreta la información del archivo del mapa, agregando objetos de pilas de monedas, muros y robots a sus respectivas listas
-    public  void filtrar(List<String> mapa, List<Muro> muro, List<PilaMonedas> moneda, List <Robot> robo ){
-        String r="";
-        for (int i = 0;i <mapa.size();i++){
-            String spl[]=mapa.get(i).split("");
-            for(int c = 0;c<spl.length;c++){
-                switch(spl[c]){
-                    case "*": muro.add(new Muro(i,c));
-                        break;
-                    case "1": moneda.add(new PilaMonedas(i,c,1));
-                        break;
-                    case "2": moneda.add(new PilaMonedas(i,c,2));
-                        break;
-                    case "3": moneda.add(new PilaMonedas(i,c,3));
-                        break;
-                    case "4": moneda.add(new PilaMonedas(i,c,4));
-                        break;
-                    case "5" :moneda.add(new PilaMonedas(i,c,5));
-                        break;
-                    case "6": moneda.add(new PilaMonedas(i,c,6));
-                        break;
-                    case "7": moneda.add(new PilaMonedas(i,c,7));
-                        break;
-                    case "8": moneda.add(new PilaMonedas(i,c,8));
-                        break;
-                    case "9": moneda.add(new PilaMonedas(i,c,9));
-                        break;
-                    case "<": robo.add(new Robot (i,c,2,0));
-                        break;
-                    case ">":robo.add(new Robot (i,c,0,0));
-                        break;
-                    case "^": robo.add(new Robot (i,c,3,0));
-                        break;
-                    case "v" : robo.add(new Robot (i,c,1,0));
-                        break;
+    public static  void filtrar(List<String> mapa, List<Muro> muro, List<PilaMonedas> moneda, List <Robot> robots ){
+
+
+
+    }
+    public static void actualizarMapa(List<String> mapa,List<Muro> muro, List<PilaMonedas> moneda, List <Robot> robo){
+
+        List <String[]> temp = new ArrayList<>();
+        for (int i = 0;i<mapa.size();i++){
+            temp.add(mapa.get(i).split(""));
+        }
+
+        Robot robot = robo.get(0);
+
+        for (int a = 0;a<temp.size();a++){
+            for (int b = 0;b<mapa.get(a).length();b++){
+                if (temp.get(a)[b]=="v"){
+                    temp.get(a)[b]=" ";
+                    break;
+                }else if (temp.get(a)[b]==">"){
+                    temp.get(a)[b]=" ";
+                    break;
+                }else if (temp.get(a)[b]=="<"){
+                    temp.get(a)[b]=" ";
+                    break;
+                }else if (temp.get(a)[b]=="^"){
+                    temp.get(a)[b]=" ";
+                    break;
                 }
+            }
+            break;
+        }
+        temp.get(robot.getPosicion()[1])[0]=robot.interpretarOrientacion();
+
+        for (int c = 0;c<moneda.size();c++){
+            if (temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]!="v"){
+                temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]= String.valueOf(moneda.get(c).getCantidad());
+            }else if (temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]!="<"){
+                temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]= String.valueOf(moneda.get(c).getCantidad());
+            }else if (temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]!=">"){
+                temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]= String.valueOf(moneda.get(c).getCantidad());
+            }else if(temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]!="^"){
+                temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]= String.valueOf(moneda.get(c).getCantidad());
+            }
+            if (temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]=="0"){
+                temp.get(moneda.get(c).getPosicion()[1])[moneda.get(c).getPosicion()[0]]=" ";
             }
         }
 
+        for (int d  = 0;d< temp.size();d++){
+            String linea = "";
+            for(int e  = 0;e <temp.get(d).length;e++){
+                linea = linea + temp.get(d)[e];
+            }
+            mapa.set(d,linea);
+        }
 
-        //return r;
     }
 }

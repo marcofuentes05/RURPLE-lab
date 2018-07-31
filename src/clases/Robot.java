@@ -34,28 +34,27 @@ public class Robot {
         a.restarMonedas();
         cantidadMonedas =+1;
     }
-    public void mover(Boolean puedeMover){
+    public void mover(){
         if (orientacion==0){
-            if (puedeMover){
-                posicion[0]=+1;
-            }
+            posicion[0]=+1;
+
         }else if (orientacion == 1){
-            if (puedeMover){
-                posicion[1]=-1;
-            }
+
+            posicion[1]=-1;
+
         }else if (orientacion == 2){
-            if(puedeMover){
-                posicion[0]=-1;
-            }
+
+            posicion[0]=-1;
+
         }else if (orientacion == 3){
-            if (puedeMover){
-                posicion[1]=+1;
-            }
+
+            posicion[1]=+1;
+
         }
     }
-    public Boolean puedeMover(int orient, List<String> mapa){
+    public Boolean puedeMover(List<String> mapa){
         Boolean re = true;
-        switch (orient){
+        switch (orientacion){
             case 0: if (mapa.get(posicion[0]+1)=="*"){
                 re=false;
             }
@@ -65,7 +64,7 @@ public class Robot {
             }
             break;
             case 2 : if(mapa.get(posicion[0]-1)=="*"){
-                re=false
+                re=false;
             }
             break;
             case 3: if (mapa.get(posicion[1]+1)=="*"){
@@ -80,4 +79,24 @@ public class Robot {
     public void girar (){
         orientacion=(orientacion + 1) % 4;
     }
+
+    public String interpretarOrientacion(){
+        String o= "";
+        switch (orientacion){
+            case 0:
+                o = ">";
+                break;
+            case 1:
+                o = "v";
+                break;
+            case 2:
+                o = "<";
+                break;
+            case 3:
+                o = "^";
+                break;
+        }
+        return o;
+    }
 }
+
