@@ -34,48 +34,52 @@ public class Robot {
         a.restarMonedas();
         cantidadMonedas =+1;
     }
+
     public void mover(){
         if (orientacion==0){
             posicion[0]=+1;
-
         }else if (orientacion == 1){
-
             posicion[1]=-1;
-
         }else if (orientacion == 2){
-
             posicion[0]=-1;
-
         }else if (orientacion == 3){
-
             posicion[1]=+1;
-
         }
     }
-    public Boolean puedeMover(List<String> mapa){
+
+    public Boolean puedeMover(String[][] mapa){
         Boolean re = true;
-        switch (orientacion){
-            case 0: if (mapa.get(posicion[0]+1)=="*"){
-                re=false;
+        try{
+            switch (orientacion){
+                case 0:
+                    if (mapa[posicion[0]][posicion[1]]=="*"){
+                    re=false;
+                    }
+                    break;
+                case 1:
+                    if (mapa[posicion[0]][posicion[1]]=="*"){
+                    re= false;
+                    }
+                    break;
+                case 2 :
+                    if(mapa[posicion[0]][posicion[1]]=="*"){
+                    re=false;
+                    }
+                    break;
+                case 3:
+                    if (mapa[posicion[0]][posicion[1]]=="*"){
+                    re=false;
+                    }
+                    break;
+                default:
+                    break;
             }
-            break;
-            case 1: if (mapa.get(posicion[1]-1)=="*"){
-                re= false;
-            }
-            break;
-            case 2 : if(mapa.get(posicion[0]-1)=="*"){
-                re=false;
-            }
-            break;
-            case 3: if (mapa.get(posicion[1]+1)=="*"){
-                re=false;
-            }
-            break;
-            default:
+        }catch(IndexOutOfBoundsException e){
+            re= false;
         }
         return re;
-
     }
+
     public void girar (){
         orientacion=(orientacion + 1) % 4;
     }
