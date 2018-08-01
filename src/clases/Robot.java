@@ -37,13 +37,13 @@ public class Robot {
 
     public void mover(){
         if (orientacion==0){
-            posicion[0]=+1;
+            posicion[1]= posicion[1]+1;
         }else if (orientacion == 1){
-            posicion[1]=-1;
+            posicion[0]= posicion[0]+1;
         }else if (orientacion == 2){
-            posicion[0]=-1;
+            posicion[1]=posicion[1]-1;
         }else if (orientacion == 3){
-            posicion[1]=+1;
+            posicion[0]= posicion [0]-1;
         }
     }
 

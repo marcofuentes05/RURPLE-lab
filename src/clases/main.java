@@ -1,5 +1,7 @@
 package clases;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,7 +19,6 @@ public class main {
         try{
             Stream<String> lines = Files.lines(Paths.get("C:/Users/fuent/OneDrive/Documents/2018/POO/RURPLE/RURPLE-lab/mapa1.txt"),StandardCharsets.UTF_8);
             lines.forEach(s  -> mapa.add(s));
-            //mapa.stream().forEach(p-> System.out.println(p));
         }catch(IOException e ){
             System.out.println("Error!");
         }
@@ -26,20 +27,32 @@ public class main {
             Stream <String> lines = Files.lines (Paths.get("C:/Users/fuent/OneDrive/Documents/2018/POO/RURPLE/RURPLE-lab/instrucciones.txt"),
                     StandardCharsets.UTF_8);
             lines.forEach(a -> instrucciones.add(a));
-            //lines.forEach(b -> System.out.println(b));
         }catch(IOException e){
             System.out.println("Error!");
         }
 
         Map map = new Map(mapa,instrucciones);
+        //System.out.println(map.imprimir());
+        /**System.out.println(map.robot.getPosicion()[0]+" "+map.robot.getPosicion()[1]);
+        map.robot.mover();
+        System.out.println(map.robot.getPosicion()[0]+" "+map.robot.getPosicion()[1]);**/
 
+        //map.actualizarMapa();
+        //System.out.println(map.imprimir());
         for (int control =0;control < map.instrucciones.length;control++){
-            System.out.println(control);
+            map.actualizarMapa();
+            System.out.println(map.imprimir());
             String inst = map.instrucciones[control];
             switch(inst){
                 case "MOVE":
                     if (map.robot.puedeMover(map.mapa)){
-                        map.robot.mover();
+                        try{
+                            map.robot.mover();
+                        }catch(Exception e){
+                            break;
+                        }
+                    }else{
+                        System.out.println("No se puede mover...");
                     }
                     break;
                 case "ROTATE":
@@ -47,17 +60,16 @@ public class main {
                     break;
                 case "PICK":
                     for(int i = 0;i<map.monedas.size();i++){
-                        if (map.monedas.get(i).getPosicion() == map.robot.getPosicion()){
-                            //El metodo recoger le suma monedas al robot y le resta a la pila de monedas.
-                            map.robot.recoger(map.monedas.get(i));
+                        if (map.monedas.get(i).getPosicion()[0] == map.robot.getPosicion()[0]){
+                            if (map.monedas.get(i).getPosicion()[1]==map.robot.getPosicion()[1]){
+                                //El metodo recoger le suma monedas al robot y le resta a la pila de monedas.
+                                map.robot.recoger(map.monedas.get(i));
+                            }
                         }
                     }
                     break;
                 default:
             }
-            map.actualizarMapa();
-            System.out.println(map.imprimir());
-
             try{
                 Thread.sleep(500);
             }catch(Exception e){

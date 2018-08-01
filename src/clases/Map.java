@@ -92,23 +92,12 @@ public class Map {
     }
 
     public void actualizarMapa(){
-        int i = robot.getPosicion()[0];
-        int j = robot.getPosicion()[1];
-        if (mapa[i][j]==" "){
-            mapa[i][j]=robot.interpretarOrientacion();
-        }
-        /**try{
-            if (mapa[i][j]==" "){
-                mapa[i][j]=robot.interpretarOrientacion();
-            }
-        }catch(Exception e){}**/
-
+        int a = 0;
+        int b = 0;
         for (int x = 0;x<monedas.size();x++){
-            int a = monedas.get(x).getPosicion()[0];
-            int b = monedas.get(x).getPosicion()[1];
-            if (mapa[a][b] != String.valueOf(monedas.get(x).getCantidad())){
-                mapa[a][b]=String.valueOf(monedas.get(x).getCantidad());
-            }
+            a = monedas.get(x).getPosicion()[0];
+            b = monedas.get(x).getPosicion()[1];
+            mapa[a][b]=String.valueOf(monedas.get(x).getCantidad());
         }
         for (int x = 0;x<alto;x++){
             for (int y = 0;y<ancho;y++){
@@ -124,10 +113,13 @@ public class Map {
                 }else if (mapa[x][y]=="^"){
                     mapa[x][y]=" ";
                     break;
+                }else if (mapa[x][y]=="0"){
+                    mapa[x][y] = " ";
                 }
             }
         }
-
-
+        int i = robot.getPosicion()[0];
+        int j = robot.getPosicion()[1];
+        mapa[i][j]=robot.interpretarOrientacion();
     }
 }
