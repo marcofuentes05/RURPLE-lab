@@ -8,8 +8,8 @@ public class PilaMonedas {
         posicion[0]=x;
         posicion[1]=y;
         cantidad = c;
-
     }
+
     public int[] getPosicion(){
         return posicion;
     }
